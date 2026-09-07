@@ -10,10 +10,10 @@
     <UseWinUI>true</UseWinUI>
     <WindowsPackageType>None</WindowsPackageType>
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
-    <EnableMsixTooling>false</EnableMsixTooling>
-    <GeneratePri>false</GeneratePri>
-    <AppxGeneratePriEnabled>false</AppxGeneratePriEnabled>
-    <EnableCoreMrtTooling>false</EnableCoreMrtTooling>
+    <SelfContained>true</SelfContained>
+    <EnableMsixTooling>true</EnableMsixTooling>
+    <WindowsAppSdkBootstrapInitialize>false</WindowsAppSdkBootstrapInitialize>
+    <WindowsAppSdkUndockedRegFreeWinRTInitialize>true</WindowsAppSdkUndockedRegFreeWinRTInitialize>
     <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -24,10 +24,5 @@
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.6.250205002" GeneratePathProperty="true" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.1742" />
     <Manifest Include="$(ApplicationManifest)" />
-    <Content Include="$(PkgMicrosoft_WindowsAppSDK)\runtimes\win-x64\native\Microsoft.WindowsAppRuntime.Bootstrap.dll"
-             Condition="'$(PkgMicrosoft_WindowsAppSDK)' != ''"
-             CopyToOutputDirectory="PreserveNewest"
-             Link="Microsoft.WindowsAppRuntime.Bootstrap.dll"
-             Visible="false" />
   </ItemGroup>
 </Project>

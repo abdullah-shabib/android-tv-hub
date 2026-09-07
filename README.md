@@ -11,7 +11,8 @@ See [CONTEXT.md](CONTEXT.md) for the glossary, [docs/adr/](docs/adr/) for the lo
 - [Windows Hypervisor Platform](https://learn.microsoft.com/en-us/virtualization/api/) (QEMU lists this as `whpx`)
 - [QEMU for Windows](https://qemu.weilnetz.de/) (`winget install SoftwareFreedomConservancy.QEMU`)
 - .NET 8 SDK to build
-- Windows App SDK runtime 1.6 (`winget install Microsoft.WindowsAppRuntime.1.6`) — already present on many Windows 11 PCs
+
+The release zip is unpackaged and **self-contained**. You do not need to install the Windows App Runtime separately.
 
 ## Build
 
@@ -26,16 +27,16 @@ Run `src\AndroidTvHub\bin\x64\Release\net8.0-windows10.0.19041.0\AndroidTvHub.ex
 GitHub Actions builds an unpackaged **win-x64 zip** on every push/PR and attaches it to a [GitHub Release](https://github.com/abdullah-shabib/android-tv-hub/releases) when you push a tag `vMAJOR.MINOR.PATCH`:
 
 ```powershell
-git tag v0.1.0
-git push origin v0.1.0
+git tag v0.1.1
+git push origin v0.1.1
 ```
 
-The zip contains `AndroidTvHub.exe` plus LICENSE notices. It does **not** include QEMU or the Guest ISO.
+The zip contains `AndroidTvHub.exe`, the WinUI runtime, and LICENSE notices. It does **not** include QEMU or the Guest ISO.
 
 Locally:
 
 ```powershell
-./tools/pack-release.ps1 -Version 0.1.0
+./tools/pack-release.ps1 -Version 0.1.1
 ```
 
 ## v1

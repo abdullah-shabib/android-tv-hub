@@ -1,0 +1,4 @@
+{
+  "name": "Android TV Hub",
+  "install": "bash .cursor/install.sh"
+}

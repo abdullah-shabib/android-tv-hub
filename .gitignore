@@ -13,5 +13,9 @@ obj/
 src/AndroidTvHub/AppPackages/
 src/AndroidTvHub/BundleArtifacts/
 **/Generated Files/
-.cursor/
+
+# Ignore local Cursor state but keep the committed Cloud Agent environment config.
+.cursor/*
+!.cursor/environment.json
+!.cursor/install.sh
 

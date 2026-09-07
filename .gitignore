@@ -1,0 +1,17 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userosscache
+[Dd]ebug/
+[Rr]elease/
+*.iso
+*.qcow2
+*.img
+*.log
+src/AndroidTvHub/AppPackages/
+src/AndroidTvHub/BundleArtifacts/
+**/Generated Files/
+.cursor/
+

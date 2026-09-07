@@ -39,6 +39,21 @@ if (-not (Test-Path $exe)) {
     throw "Publish succeeded but AndroidTvHub.exe was not found at $exe"
 }
 
+$pri = Join-Path $publishDir "resources.pri"
+$altPri = Join-Path $publishDir "AndroidTvHub.pri"
+if (-not (Test-Path $pri) -and (Test-Path $altPri)) {
+    Copy-Item $altPri $pri
+}
+if (-not (Test-Path $pri)) {
+    throw "Publish did not produce resources.pri (needed for WinUI XAML). EnableMsixTooling must stay true."
+}
+foreach ($name in @("Microsoft.ui.xaml.dll", "Microsoft.WindowsAppRuntime.dll")) {
+    $path = Join-Path $publishDir $name
+    if (-not (Test-Path $path)) {
+        throw "Publish is missing $name. WindowsAppSDKSelfContained publish is incomplete."
+    }
+}
+
 Copy-Item (Join-Path $repoRoot "LICENSE") $publishDir -Force
 Copy-Item (Join-Path $repoRoot "THIRD-PARTY-NOTICES.md") $publishDir -Force
 
@@ -46,7 +61,8 @@ $install = @"
 Android TV Hub $Version
 Unpackaged Windows x64 App Player for Android TV OS.
 
-This zip does not include QEMU or a Guest ISO. The Hub downloads the pinned
+This zip is self-contained WinUI (no separate Windows App Runtime install).
+It does not include QEMU or a Guest ISO. The Hub downloads the pinned
 Lineage TV image at runtime. Install QEMU separately:
 
   winget install SoftwareFreedomConservancy.QEMU

@@ -57,7 +57,8 @@ jobs:
         run: |
           $zip = Get-ChildItem artifacts/AndroidTvHub-win-x64-*.zip | Select-Object -First 1
           $notes = @"
-          Unpackaged Windows x64 Hub (WinUI). QEMU and the Guest ISO are **not** in this zip.
+          Unpackaged self-contained Windows x64 Hub (WinUI). No Windows App Runtime install.
+          QEMU and the Guest ISO are **not** in this zip.
 
           1. Unzip and run ``AndroidTvHub.exe``
           2. ``winget install SoftwareFreedomConservancy.QEMU``

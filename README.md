@@ -21,6 +21,23 @@ dotnet build src\AndroidTvHub\AndroidTvHub.csproj -c Release -p:Platform=x64
 
 Run `src\AndroidTvHub\bin\x64\Release\net8.0-windows10.0.19041.0\AndroidTvHub.exe`.
 
+## Release package
+
+GitHub Actions builds an unpackaged **win-x64 zip** on every push/PR and attaches it to a [GitHub Release](https://github.com/abdullah-shabib/android-tv-hub/releases) when you push a tag `vMAJOR.MINOR.PATCH`:
+
+```powershell
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+The zip contains `AndroidTvHub.exe` plus LICENSE notices. It does **not** include QEMU or the Guest ISO.
+
+Locally:
+
+```powershell
+./tools/pack-release.ps1 -Version 0.1.0
+```
+
 ## v1
 
 - Download the pinned Lineage TV x86 ISO (not stored in git)

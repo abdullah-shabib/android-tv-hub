@@ -1,0 +1,70 @@
+name: Release package
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*.*.*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pack:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Resolve version
+        id: ver
+        shell: pwsh
+        run: |
+          if ($env:GITHUB_REF_TYPE -eq "tag" -and $env:GITHUB_REF_NAME -match '^v(\d+\.\d+\.\d+)$') {
+            $v = $Matches[1]
+          } else {
+            $v = "0.0.0-ci.$($env:GITHUB_SHA.Substring(0, 7))"
+          }
+          "version=$v" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+          Write-Host "version=$v"
+
+      - name: Pack win-x64 zip
+        shell: pwsh
+        run: ./tools/pack-release.ps1 -Version "${{ steps.ver.outputs.version }}"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AndroidTvHub-win-x64
+          path: artifacts/AndroidTvHub-win-x64-*.zip
+          if-no-files-found: error
+
+      - name: GitHub Release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: pwsh
+        run: |
+          $zip = Get-ChildItem artifacts/AndroidTvHub-win-x64-*.zip | Select-Object -First 1
+          $notes = @"
+          Unpackaged Windows x64 Hub (WinUI). QEMU and the Guest ISO are **not** in this zip.
+
+          1. Unzip and run ``AndroidTvHub.exe``
+          2. ``winget install SoftwareFreedomConservancy.QEMU``
+          3. In the Hub, download the Guest ISO, then Start Guest
+
+          See INSTALL.txt inside the zip.
+          "@
+          gh release create "${{ github.ref_name }}" $zip.FullName `
+            --title "Android TV Hub ${{ github.ref_name }}" `
+            --notes $notes

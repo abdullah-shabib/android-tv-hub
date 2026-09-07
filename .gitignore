@@ -18,4 +18,6 @@ src/AndroidTvHub/BundleArtifacts/
 .cursor/*
 !.cursor/environment.json
 !.cursor/install.sh
+publish/
+artifacts/
 
